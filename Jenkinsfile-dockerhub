@@ -39,6 +39,7 @@ pipeline {
             steps {
                 sh 'trivy image $APP_NAME:$BUILD_NUMBER'
             }
+
        }
         stage('push image') {
             steps{
@@ -54,8 +55,12 @@ pipeline {
         }
     post { 
         always { 
+            echo 'slack notifications'
            //slackSend message: 'Pipeline completed - Build deployed successfully '
-           slackSend color: "good", message: "Build Deployed Successfully, Downstream Job Triggered"
+           slackSend(
+                channel: '#jenkins',
+                color: "good", message: "Build Deployed Successfully, Downstream Job Triggered"
+            )
            }
     }
 }
